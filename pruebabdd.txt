@@ -1,0 +1,621 @@
+
+CREATE TABLE bills(
+id_bills VARCHAR (10)PRIMARY KEY,
+date_fac DATE,
+subtotal int,
+total_prod int,
+id_rut varchar(12) REFERENCES customers(rut)
+);
+
+CREATE TABLE purchase(
+id_purchase SERIAL PRIMARY KEY,
+code_bills VARCHAR(10) REFERENCES bills(id_bills),
+id_pro VARCHAR(19) REFERENCES products(id),
+cant INT,
+subtotal INT,
+iva INT,
+total INT
+);
+
+
+
+
+
+
+
+
+
+prueba=# \dt
+              List of relations
+ Schema |    Name    | Type  |     Owner      
+--------+------------+-------+----------------
+ public | bills      | table | tcgconsultores
+ public | categories | table | tcgconsultores
+ public | customers  | table | tcgconsultores
+ public | products   | table | tcgconsultores
+ public | purchase   | table | tcgconsultores
+(5 rows)
+
+
+prueba=# INSERT INTO products (id,name_pro,descrip,price,id_cat) VALUES ('aaaa123456','yoghurt griego','muy saludable',450,'cc123456');
+INSERT 0 1
+prueba=# INSERT INTO products (id,name_pro,descrip,price,id_cat) VALUES ('aaaa234567','possta rosada','cero grasa saturada',6000,'ab123456');
+INSERT 0 1
+prueba=# INSERT INTO products (id,name_pro,descrip,price,id_cat) VALUES ('aaaa234587','huachalomo','muy rica la grasa',8000,'ab123456');
+INSERT 0 1
+prueba=# INSERT INTO products (id,name_pro,descrip,price,id_cat) VALUES ('aaaa234588','posta negra','su sabor es lo mejor',9000,'ab123456');
+INSERT 0 1
+prueba=# INSERT INTO products (id,name_pro,descrip,price,id_cat) VALUES ('aaaa23457','leche cultivada','su sabor es natural',9000,'cc123456');
+INSERT 0 1
+prueba=# INSERT INTO products (id,name_pro,descrip,price,id_cat) VALUES ('aaaa23458','leche larga vida','mucha mas proteina',670,'cc123456');
+INSERT 0 1
+prueba=# INSERT INTO products (id,name_pro,descrip,price,id_cat) VALUES ('aaaa23555','Salmon arcoiris','del mar a su mesa',20000,'bb123456');
+INSERT 0 1
+prueba=# INSERT INTO products (id,name_pro,descrip,price,id_cat) VALUES ('aaaa23555','langosta roja','desde la isla con sabor',24000,'bb123456');
+ERROR:  duplicate key value violates unique constraint "products_pkey"
+DETAIL:  Key (id)=(aaaa23555) already exists.
+prueba=# INSERT INTO products (id,name_pro,descrip,price,id_cat) VALUES ('aaaa23556','langosta roja','desde la isla con sabor',24000,'bb123456');
+INSERT 0 1
+prueba=# select * from products ;
+     id     |     name_pro     |         descrip         | price |  id_cat  
+------------+------------------+-------------------------+-------+----------
+ aaaa123456 | yoghurt griego   | muy saludable           |   450 | cc123456
+ aaaa234567 | possta rosada    | cero grasa saturada     |  6000 | ab123456
+ aaaa234587 | huachalomo       | muy rica la grasa       |  8000 | ab123456
+ aaaa234588 | posta negra      | su sabor es lo mejor    |  9000 | ab123456
+ aaaa23457  | leche cultivada  | su sabor es natural     |  9000 | cc123456
+ aaaa23458  | leche larga vida | mucha mas proteina      |   670 | cc123456
+ aaaa23555  | Salmon arcoiris  | del mar a su mesa       | 20000 | bb123456
+ aaaa23556  | langosta roja    | desde la isla con sabor | 24000 | bb123456
+(8 rows)
+
+
+                      ^
+prueba=# select * from categories ;
+    id    |   name_cat    |   description_ca   
+----------+---------------+--------------------
+ ab123456 | carne roja    | producto sano
+ bb123456 | carne blaanca | producto rico
+ cc123456 | lacteo        | producto nutritivo
+(3 rows)
+
+prueba=# select * from customers ;
+ id | name | adress | rut 
+----+------+--------+-----
+(0 rows)
+
+prueba=# INSERT INTO customers (name,adress,rut) VALUES ('Pedro Fernandez Fernandez','Via lacte 12345 la florida','13478218-5');
+INSERT 0 1
+prueba=# INSERT INTO customers (name,adress,rut) VALUES ('Laura Soto Soto','El pañuelo rojo 234 , las condes','13123456-8');
+INSERT 0 1
+prueba=# INSERT INTO customers (name,adress,rut) VALUES ('Enrique Maluenda Hurtado','El pañuelo colorado 133 , peñaflor','20435678-8');
+INSERT 0 1
+prueba=# INSERT INTO customers (name,adress,rut) VALUES ('Marcela Paz Paz','El queltehue 234 , peñaflor','20435678-8');
+ERROR:  duplicate key value violates unique constraint "customers_pkey"
+DETAIL:  Key (rut)=(20435678-8) already exists.
+prueba=# INSERT INTO customers (name,adress,rut) VALUES ('Marcela Paz Paz','El queltehue 234 , peñaflor','12345678-9');
+INSERT 0 1
+prueba=# INSERT INTO customers (name,adress,rut) VALUES ('Enrique Lafurcade Perez','Donde la amiga 1 , peñaflor','23897654-9');
+INSERT 0 1
+prueba=# select * from bills;
+ id_bills | date_fac | id_rut | id_rutt 
+----------+----------+--------+---------
+(0 rows)
+
+prueba=# ALTER TABLE bills DROP id_rutt ;
+ALTER TABLE
+prueba=# select * from bills;
+ id_bills | date_fac | id_rut 
+----------+----------+--------
+(0 rows)
+
+pr
+prueba=# select * from customers ;
+ id |           name            |               adress               |    rut     
+----+---------------------------+------------------------------------+------------
+  1 | Pedro Fernandez Fernandez | Via lacte 12345 la florida         | 13478218-5
+  2 | Laura Soto Soto           | El pañuelo rojo 234 , las condes   | 13123456-8
+  3 | Enrique Maluenda Hurtado  | El pañuelo colorado 133 , peñaflor | 20435678-8
+  5 | Marcela Paz Paz           | El queltehue 234 , peñaflor        | 12345678-9
+  6 | Enrique Lafurcade Perez   | Donde la amiga 1 , peñaflor        | 23897654-9
+(5 rows)
+
+.
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1234','2020-01-05','23897654-9');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1235','2020-01-06','23897654-9');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1236','2020-01-07','23897654-9');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1237','2020-01-08','23897654-9');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1240','2020-01-05','13478218-5');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1241','2020-01-06','13478218-5');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1250','2020-01-12','13123456-8');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1251','2020-01-13','13123456-8');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1252','2020-01-14','13123456-8');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1260','2020-01-15','12345678-9');
+INSERT 0 1
+prueba=# delete from bills ;
+DELETE 10
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1234','2020-01-05','12345678-9');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1235','2020-01-06','12345678-9');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1236','2020-01-07','12345678-9');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1237','2020-01-08','12345678-9');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1240','2020-01-05','13478218-5');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1241','2020-01-06','13478218-5');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1250','2020-01-12','13123456-8');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1251','2020-01-13','13123456-8');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1252','2020-01-14','13123456-8');
+INSERT 0 1
+prueba=# INSERT INTO bills (id_bills,date_fac,id_rut) VALUES ('asde1260','2020-01-15','20435678-8');
+INSERT 0 1
+prueba=# \dt
+              List of relations
+ Schema |    Name    | Type  |     Owner      
+--------+------------+-------+----------------
+ public | bills      | table | tcgconsultores
+ public | categories | table | tcgconsultores
+ public | customers  | table | tcgconsultores
+ public | products   | table | tcgconsultores
+ public | purchase   | table | tcgconsultores
+(5 rows)
+
+prueba=# select * from purchase ;
+ id_purchase | cant | subtotal | iva | total | code_bills | id_pro 
+-------------+------+----------+-----+-------+------------+--------
+(0 rows)
+
+prueba=# drop table purchase;
+DROP TABLE
+prueba=# select * from bills ;
+ id_bills |  date_fac  |   id_rut   
+----------+------------+------------
+ asde1234 | 2020-01-05 | 12345678-9
+ asde1235 | 2020-01-06 | 12345678-9
+ asde1236 | 2020-01-07 | 12345678-9
+ asde1237 | 2020-01-08 | 12345678-9
+ asde1240 | 2020-01-05 | 13478218-5
+ asde1241 | 2020-01-06 | 13478218-5
+ asde1250 | 2020-01-12 | 13123456-8
+ asde1251 | 2020-01-13 | 13123456-8
+ asde1252 | 2020-01-14 | 13123456-8
+ asde1260 | 2020-01-15 | 20435678-8
+(10 rows)
+
+prueba=# select * from products ;
+     id     |     name_pro     |         descrip         | price |  id_cat  
+------------+------------------+-------------------------+-------+----------
+ aaaa123456 | yoghurt griego   | muy saludable           |   450 | cc123456
+ aaaa234567 | possta rosada    | cero grasa saturada     |  6000 | ab123456
+ aaaa234587 | huachalomo       | muy rica la grasa       |  8000 | ab123456
+ aaaa234588 | posta negra      | su sabor es lo mejor    |  9000 | ab123456
+ aaaa23457  | leche cultivada  | su sabor es natural     |  9000 | cc123456
+ aaaa23458  | leche larga vida | mucha mas proteina      |   670 | cc123456
+ aaaa23555  | Salmon arcoiris  | del mar a su mesa       | 20000 | bb123456
+ aaaa23556  | langosta roja    | desde la isla con sabor | 24000 | bb123456
+(8 rows)
+
+prueba=# CREATE TABLE purchase(
+prueba(# id_purchase SERIAL PRIMARY KEY,
+prueba(# code_bills VARCHAR(10) REFERENCES bill(id_bills),
+prueba(# id_pro VARCHAR(19) REFERENCES products(id),
+prueba(# cant INT,
+prueba(# subtotal INT,
+prueba(# iva INT,
+prueba(# total INT
+prueba(# );
+
+prueba=# CREATE TABLE purchase(
+id_purchase SERIAL PRIMARY KEY,
+code_bills VARCHAR(10) REFERENCES bills(id_bills),
+id_pro VARCHAR(19) REFERENCES products(id),
+cant INT,
+subtotal INT,
+iva INT,
+total INT
+);
+CREATE TABLE
+prueba=# select * from bills ;
+ id_bills |  date_fac  |   id_rut   
+----------+------------+------------
+ asde1234 | 2020-01-05 | 12345678-9
+ asde1235 | 2020-01-06 | 12345678-9
+ asde1236 | 2020-01-07 | 12345678-9
+ asde1237 | 2020-01-08 | 12345678-9
+ asde1240 | 2020-01-05 | 13478218-5
+ asde1241 | 2020-01-06 | 13478218-5
+ asde1250 | 2020-01-12 | 13123456-8
+ asde1251 | 2020-01-13 | 13123456-8
+ asde1252 | 2020-01-14 | 13123456-8
+ asde1260 | 2020-01-15 | 20435678-8
+(10 rows)
+
+prueba=# select * from products ;
+     id     |     name_pro     |         descrip         | price |  id_cat  
+------------+------------------+-------------------------+-------+----------
+ aaaa123456 | yoghurt griego   | muy saludable           |   450 | cc123456
+ aaaa234567 | possta rosada    | cero grasa saturada     |  6000 | ab123456
+ aaaa234587 | huachalomo       | muy rica la grasa       |  8000 | ab123456
+ aaaa234588 | posta negra      | su sabor es lo mejor    |  9000 | ab123456
+ aaaa23457  | leche cultivada  | su sabor es natural     |  9000 | cc123456
+ aaaa23458  | leche larga vida | mucha mas proteina      |   670 | cc123456
+ aaaa23555  | Salmon arcoiris  | del mar a su mesa       | 20000 | bb123456
+ aaaa23556  | langosta roja    | desde la isla con sabor | 24000 | bb123456
+(8 rows)
+
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1240','aaaa234588',2,1340,255,1595);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1240','aaaa234587',2,18000,3422,21420);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1241','aaaa234567',6,18000,3420,21420);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1241','aaaa23556',1,24000,4560,28560);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1241','aaaa123456',2,900,171,1071);
+INSERT 0 1
+prueba=# select * from purchase;
+ id_purchase | code_bills |   id_pro   | cant | subtotal | iva  | total 
+-------------+------------+------------+------+----------+------+-------
+           6 | asde1240   | aaaa234588 |    2 |     1340 |  255 |  1595
+           7 | asde1240   | aaaa234587 |    2 |    18000 | 3422 | 21420
+           8 | asde1241   | aaaa234567 |    6 |    18000 | 3420 | 21420
+           9 | asde1241   | aaaa23556  |    1 |    24000 | 4560 | 28560
+          10 | asde1241   | aaaa123456 |    2 |      900 |  171 |  1071
+(5 rows)
+
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1250','aaaa23555',2,40000,7600,47600);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1250','aaaa234588',3,27000,5130,32130);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1250','aaaa234587',1,8000,1520,9520);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1251','aaaa123456',10,4500,855,5355);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1251','aaaa23556',3,72000,13680,85680);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1252','aaaa234567',3,18000,3420,21420);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1252','aaaa123456',3,1350,257,1607);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1252','aaaa23556',1,24000,4560,28560);
+INSERT 0 1
+prueba=# select * from purchase;
+ id_purchase | code_bills |   id_pro   | cant | subtotal |  iva  | total 
+-------------+------------+------------+------+----------+-------+-------
+           6 | asde1240   | aaaa234588 |    2 |     1340 |   255 |  1595
+           7 | asde1240   | aaaa234587 |    2 |    18000 |  3422 | 21420
+           8 | asde1241   | aaaa234567 |    6 |    18000 |  3420 | 21420
+           9 | asde1241   | aaaa23556  |    1 |    24000 |  4560 | 28560
+          10 | asde1241   | aaaa123456 |    2 |      900 |   171 |  1071
+          11 | asde1250   | aaaa23555  |    2 |    40000 |  7600 | 47600
+          12 | asde1250   | aaaa234588 |    3 |    27000 |  5130 | 32130
+          13 | asde1250   | aaaa234587 |    1 |     8000 |  1520 |  9520
+          14 | asde1251   | aaaa123456 |   10 |     4500 |   855 |  5355
+          16 | asde1251   | aaaa23556  |    3 |    72000 | 13680 | 85680
+          17 | asde1252   | aaaa234567 |    3 |    18000 |  3420 | 21420
+          18 | asde1252   | aaaa123456 |    3 |     1350 |   257 |  1607
+          19 | asde1252   | aaaa23556  |    1 |    24000 |  4560 | 28560
+(13 rows)
+
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1260','aaaa23556',1,24000,4560,28560);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1234','aaaa123456',10,4500,855,5355);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1234','aaaa234567',10,60000,11400,71400);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1235','aaaa123456',10,4500,855,5355);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1235','aaaa234567',10,60000,11400,71400);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1235','aaaa23457',10,90000,17100,107100);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1236','aaaa123456',10,4500,855,5355);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1236','aaaa234567',10,60000,11400,71400);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1236','aaaa23457',10,90000,17100,107100);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1236','aaaa234588',10,90000,17100,107100);
+INSERT 0 1
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1237','aaaa234588',10,90000,17100,107100);
+INSERT 0 1
+prueba=# select * from purchase;
+ id_purchase | code_bills |   id_pro   | cant | subtotal |  iva  | total  
+-------------+------------+------------+------+----------+-------+--------
+           6 | asde1240   | aaaa234588 |    2 |     1340 |   255 |   1595
+           7 | asde1240   | aaaa234587 |    2 |    18000 |  3422 |  21420
+           8 | asde1241   | aaaa234567 |    6 |    18000 |  3420 |  21420
+           9 | asde1241   | aaaa23556  |    1 |    24000 |  4560 |  28560
+          10 | asde1241   | aaaa123456 |    2 |      900 |   171 |   1071
+          11 | asde1250   | aaaa23555  |    2 |    40000 |  7600 |  47600
+          12 | asde1250   | aaaa234588 |    3 |    27000 |  5130 |  32130
+          13 | asde1250   | aaaa234587 |    1 |     8000 |  1520 |   9520
+          14 | asde1251   | aaaa123456 |   10 |     4500 |   855 |   5355
+          16 | asde1251   | aaaa23556  |    3 |    72000 | 13680 |  85680
+          17 | asde1252   | aaaa234567 |    3 |    18000 |  3420 |  21420
+          18 | asde1252   | aaaa123456 |    3 |     1350 |   257 |   1607
+          19 | asde1252   | aaaa23556  |    1 |    24000 |  4560 |  28560
+          20 | asde1260   | aaaa23556  |    1 |    24000 |  4560 |  28560
+          21 | asde1234   | aaaa123456 |   10 |     4500 |   855 |   5355
+          22 | asde1234   | aaaa234567 |   10 |    60000 | 11400 |  71400
+          23 | asde1235   | aaaa123456 |   10 |     4500 |   855 |   5355
+          24 | asde1235   | aaaa234567 |   10 |    60000 | 11400 |  71400
+          25 | asde1235   | aaaa23457  |   10 |    90000 | 17100 | 107100
+          26 | asde1236   | aaaa123456 |   10 |     4500 |   855 |   5355
+          27 | asde1236   | aaaa234567 |   10 |    60000 | 11400 |  71400
+          28 | asde1236   | aaaa23457  |   10 |    90000 | 17100 | 107100
+          29 | asde1236   | aaaa234588 |   10 |    90000 | 17100 | 107100
+          30 | asde1237   | aaaa234588 |   10 |    90000 | 17100 | 107100
+(24 rows)
+
+
+prueba=# SELECT * FROM customers ;
+ id |           name            |               adress               |    rut     
+----+---------------------------+------------------------------------+------------
+  1 | Pedro Fernandez Fernandez | Via lacte 12345 la florida         | 13478218-5
+  2 | Laura Soto Soto           | El pañuelo rojo 234 , las condes   | 13123456-8
+  3 | Enrique Maluenda Hurtado  | El pañuelo colorado 133 , peñaflor | 20435678-8
+  5 | Marcela Paz Paz           | El queltehue 234 , peñaflor        | 12345678-9
+  6 | Enrique Lafurcade Perez   | Donde la amiga 1 , peñaflor        | 23897654-9
+(5 rows)
+
+prueba=# SELECT customers.name AS Cliente, bills.id_bills AS Factura,sum(purchase.total) FROM customers,bills,purchase WHERE customers.rut = bills.id_rut and bills.id_bills = purchase.code_bills;
+ERROR:  column "customers.name" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 1: SELECT customers.name AS Cliente, bills.id_bills AS Factura,...
+               ^
+prueba=# select code_bills, sum(total) from purchase group by code_bills;
+ code_bills |  sum   
+------------+--------
+ asde1250   |  89250
+ asde1241   |  51051
+ asde1236   | 290955
+ asde1252   |  51587
+ asde1237   | 107100
+ asde1260   |  28560
+ asde1251   |  91035
+ asde1235   | 183855
+ asde1240   |  23015
+ asde1234   |  76755
+(10 rows)
+
+prueba=# select code_bills, sum(total) from purchase group by code_bills order by code_bills asc ;
+ code_bills |  sum   
+------------+--------
+ asde1234   |  76755
+ asde1235   | 183855
+ asde1236   | 290955
+ asde1237   | 107100
+ asde1240   |  23015
+ asde1241   |  51051
+ asde1250   |  89250
+ asde1251   |  91035
+ asde1252   |  51587
+ asde1260   |  28560
+(10 rows)
+
+prueba=# select code_bills, sum(total) from purchase group by code_bills order by sum asc ;
+ code_bills |  sum   
+------------+--------
+ asde1240   |  23015
+ asde1260   |  28560
+ asde1241   |  51051
+ asde1252   |  51587
+ asde1234   |  76755
+ asde1250   |  89250
+ asde1251   |  91035
+ asde1237   | 107100
+ asde1235   | 183855
+ asde1236   | 290955
+(10 rows)
+
+
+prueba=# select * from purchase ;
+ id_purchase | code_bills |   id_pro   | cant | subtotal |  iva  | total  
+-------------+------------+------------+------+----------+-------+--------
+           6 | asde1240   | aaaa234588 |    2 |     1340 |   255 |   1595
+           7 | asde1240   | aaaa234587 |    2 |    18000 |  3422 |  21420
+           8 | asde1241   | aaaa234567 |    6 |    18000 |  3420 |  21420
+           9 | asde1241   | aaaa23556  |    1 |    24000 |  4560 |  28560
+          10 | asde1241   | aaaa123456 |    2 |      900 |   171 |   1071
+          11 | asde1250   | aaaa23555  |    2 |    40000 |  7600 |  47600
+          12 | asde1250   | aaaa234588 |    3 |    27000 |  5130 |  32130
+          13 | asde1250   | aaaa234587 |    1 |     8000 |  1520 |   9520
+          14 | asde1251   | aaaa123456 |   10 |     4500 |   855 |   5355
+          16 | asde1251   | aaaa23556  |    3 |    72000 | 13680 |  85680
+          17 | asde1252   | aaaa234567 |    3 |    18000 |  3420 |  21420
+          18 | asde1252   | aaaa123456 |    3 |     1350 |   257 |   1607
+          19 | asde1252   | aaaa23556  |    1 |    24000 |  4560 |  28560
+          20 | asde1260   | aaaa23556  |    1 |    24000 |  4560 |  28560
+          21 | asde1234   | aaaa123456 |   10 |     4500 |   855 |   5355
+          22 | asde1234   | aaaa234567 |   10 |    60000 | 11400 |  71400
+          23 | asde1235   | aaaa123456 |   10 |     4500 |   855 |   5355
+          24 | asde1235   | aaaa234567 |   10 |    60000 | 11400 |  71400
+          25 | asde1235   | aaaa23457  |   10 |    90000 | 17100 | 107100
+          26 | asde1236   | aaaa123456 |   10 |     4500 |   855 |   5355
+          27 | asde1236   | aaaa234567 |   10 |    60000 | 11400 |  71400
+          28 | asde1236   | aaaa23457  |   10 |    90000 | 17100 | 107100
+          29 | asde1236   | aaaa234588 |   10 |    90000 | 17100 | 107100
+          30 | asde1237   | aaaa234588 |   10 |    90000 | 17100 | 107100
+(24 rows)
+
+prueba=# select code_bills, sum(total) from purchase group by code_bills order by sum asc ;
+ code_bills |  sum   
+------------+--------
+ asde1240   |  23015
+ asde1260   |  28560
+ asde1241   |  51051
+ asde1252   |  51587
+ asde1234   |  76755
+ asde1250   |  89250
+ asde1251   |  91035
+ asde1237   | 107100
+ asde1235   | 183855
+ asde1236   | 290955
+(10 rows)
+
+
+prueba=# select code_bills, sum(total) from purchase group by code_bills order by sum desc ;
+ code_bills |  sum   
+------------+--------
+ asde1236   | 290955
+ asde1235   | 183855
+ asde1237   | 107100
+ asde1251   |  91035
+ asde1250   |  89250
+ asde1234   |  76755
+ asde1252   |  51587
+ asde1241   |  51051
+ asde1260   |  28560
+ asde1240   |  23015
+(10 rows)
+
+                                             ^
+prueba=# INSERT INTO purchase (code_bills,id_pro,cant,subtotal,iva,total) VALUES ('asde1252','aaaa23556',1,24000,4560,28560);
+INSERT 0 1
+prueba=# ALTER TABLE bills ADD COLUMN total INT ; 
+ALTER TABLE
+prueba=# SELECT * FROM BILLS;
+ id_bills |  date_fac  |   id_rut   | total 
+----------+------------+------------+-------
+ asde1234 | 2020-01-05 | 12345678-9 |      
+ asde1235 | 2020-01-06 | 12345678-9 |      
+ asde1236 | 2020-01-07 | 12345678-9 |      
+ asde1237 | 2020-01-08 | 12345678-9 |      
+ asde1240 | 2020-01-05 | 13478218-5 |      
+ asde1241 | 2020-01-06 | 13478218-5 |      
+ asde1250 | 2020-01-12 | 13123456-8 |      
+ asde1251 | 2020-01-13 | 13123456-8 |      
+ asde1252 | 2020-01-14 | 13123456-8 |      
+ asde1260 | 2020-01-15 | 20435678-8 |      
+(10 rows)
+
+prueba=# UPDATE bills  SET TOTAL =290955  where id_BILLS = 'ASDE1236';
+UPDATE 0
+prueba=# SELECT * FROM BILLS;
+ id_bills |  date_fac  |   id_rut   | total 
+----------+------------+------------+-------
+ asde1234 | 2020-01-05 | 12345678-9 |      
+ asde1235 | 2020-01-06 | 12345678-9 |      
+ asde1236 | 2020-01-07 | 12345678-9 |      
+ asde1237 | 2020-01-08 | 12345678-9 |      
+ asde1240 | 2020-01-05 | 13478218-5 |      
+ asde1241 | 2020-01-06 | 13478218-5 |      
+ asde1250 | 2020-01-12 | 13123456-8 |      
+ asde1251 | 2020-01-13 | 13123456-8 |      
+ asde1252 | 2020-01-14 | 13123456-8 |      
+ asde1260 | 2020-01-15 | 20435678-8 |      
+(10 rows)
+
+prueba=# UPDATE bills  SET TOTAL = 290955  where id_BILLS = 'asde1236';
+UPDATE 1
+prueba=# SELECT * FROM BILLS;
+ id_bills |  date_fac  |   id_rut   | total  
+----------+------------+------------+--------
+ asde1234 | 2020-01-05 | 12345678-9 |       
+ asde1235 | 2020-01-06 | 12345678-9 |       
+ asde1237 | 2020-01-08 | 12345678-9 |       
+ asde1240 | 2020-01-05 | 13478218-5 |       
+ asde1241 | 2020-01-06 | 13478218-5 |       
+ asde1250 | 2020-01-12 | 13123456-8 |       
+ asde1251 | 2020-01-13 | 13123456-8 |       
+ asde1252 | 2020-01-14 | 13123456-8 |       
+ asde1260 | 2020-01-15 | 20435678-8 |       
+ asde1236 | 2020-01-07 | 12345678-9 | 290955
+(10 rows)
+
+prueba=# UPDATE bills  SET TOTAL = 183855  where id_BILLS = 'asde1235';
+UPDATE 1
+prueba=# UPDATE bills  SET TOTAL = 107100  where id_BILLS = 'asde1237';
+UPDATE 1
+prueba=# UPDATE bills  SET TOTAL = 91035  where id_BILLS = 'asde1251';
+UPDATE 1
+prueba=# UPDATE bills  SET TOTAL = 89250  where id_BILLS = 'asde1250';
+UPDATE 1
+prueba=# UPDATE bills  SET TOTAL = 76755  where id_BILLS = 'asde1234';
+UPDATE 1
+prueba=# UPDATE bills  SET TOTAL = 51587  where id_BILLS = 'asde1252';
+UPDATE 1
+prueba=# UPDATE bills  SET TOTAL = 51051  where id_BILLS = 'asde1241';
+UPDATE 1
+prueba=# UPDATE bills  SET TOTAL = 28560  where id_BILLS = 'asde1260';
+UPDATE 1
+prueba=# UPDATE bills  SET TOTAL = 23015  where id_BILLS = 'asde1240';
+UPDATE 1
+prueba=# SELECT * FROM BILLS;
+ id_bills |  date_fac  |   id_rut   | total  
+----------+------------+------------+--------
+ asde1236 | 2020-01-07 | 12345678-9 | 290955
+ asde1235 | 2020-01-06 | 12345678-9 | 183855
+ asde1237 | 2020-01-08 | 12345678-9 | 107100
+ asde1251 | 2020-01-13 | 13123456-8 |  91035
+ asde1250 | 2020-01-12 | 13123456-8 |  89250
+ asde1234 | 2020-01-05 | 12345678-9 |  76755
+ asde1252 | 2020-01-14 | 13123456-8 |  51587
+ asde1241 | 2020-01-06 | 13478218-5 |  51051
+ asde1260 | 2020-01-15 | 20435678-8 |  28560
+ asde1240 | 2020-01-05 | 13478218-5 |  23015
+(10 rows)
+
+prueba=# SELECT customers.name AS Cliente, bills.id_bills AS Factura, bills.total  FROM customers,bills where customers.rut = bills.id_rut ; 
+          cliente          | factura  | total  
+---------------------------+----------+--------
+ Marcela Paz Paz           | asde1236 | 290955
+ Marcela Paz Paz           | asde1235 | 183855
+ Marcela Paz Paz           | asde1237 | 107100
+ Laura Soto Soto           | asde1251 |  91035
+ Laura Soto Soto           | asde1250 |  89250
+ Marcela Paz Paz           | asde1234 |  76755
+ Laura Soto Soto           | asde1252 |  51587
+ Pedro Fernandez Fernandez | asde1241 |  51051
+ Enrique Maluenda Hurtado  | asde1260 |  28560
+ Pedro Fernandez Fernandez | asde1240 |  23015
+(10 rows)
+
+prueba=# select id_rut, max(total) from bills group by id_rut;
+   id_rut   |  max   
+------------+--------
+ 12345678-9 | 290955
+ 13478218-5 |  51051
+ 20435678-8 |  28560
+ 13123456-8 |  91035
+(4 rows)
+
+prueba=# select id_rut, max(total) from bills group by id_rut limit -1;
+ERROR:  LIMIT must not be negative
+prueba=# select id_rut, max(total) from bills group by id_rut limit 1;
+   id_rut   |  max   
+------------+--------
+ 12345678-9 | 290955
+(1 row)
+
+prueba=# select id_rut AS Rut_cliente, max(total) AS Venta_mayor from bills group by id_rut limit 1;
+ rut_cliente | venta_mayor 
+-------------+-------------
+ 12345678-9  |      290955
+
+prueba=# select id_rut AS Rut_cliente, total   from bills where total > 100000 ;
+ rut_cliente | total  
+-------------+--------
+ 12345678-9  | 290955
+ 12345678-9  | 183855
+ 12345678-9  | 107100
+
+ prueba=# select count(id_pro) AS CLIENTE_COMPRO_PRODUCTO from purchase where id_pro = 'aaaa23458';
+ cliente_compro_producto 
+-------------------------
+                       1
+(1 row)

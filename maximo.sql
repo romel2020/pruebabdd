@@ -1,0 +1,1 @@
+select id_rut AS Rut_cliente, max(total) AS Venta_mayor from bills group by id_rut limit 1;
